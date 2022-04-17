@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import personService from './services/persons'
 
 const Personform = (props) => {
   return (
@@ -41,6 +42,17 @@ const Persons = ({persons}) => {
   )
 }
 
+const Notification = ({message}, {type}) => {
+  if (message === null) {
+    return null
+  }
+  return (
+    <div className='notif'>
+      {message}
+    </div>
+  ) 
+}
+
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas',
@@ -48,6 +60,16 @@ const App = () => {
   ]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [message, setMessage] = useState(null)
+  const [type, setType] = useState('error')
+
+  useEffect(() => {
+    personService
+    .getAll()
+    .then(initialPersons => {
+      setPersons(initialPersons)
+      })
+  }, [])
 
   const handleInput = (event) => {
     console.log(event.target.value)
@@ -75,17 +97,36 @@ const App = () => {
     }
 }
     if (found === true) {
-      alert(newName + ' löytyy jo luettelosta')
-    } else {
-      setPersons(persons.concat(personObject))
+      setType('error')
+      setMessage('Nimi ' + newName + ' löytyy jo luettelosta')
       setNewName('')
       setNewNumber('')
+      setTimeout(() => {
+        setMessage(null)
+        setType(null)
+      }, 4000)
+    } else {
+      setType('added')
+      setPersons(persons.concat(personObject))
+      setMessage('Nimi ' + newName + ' lisätty luetteloon!')
+      personService
+      .create(personObject)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        setNewName('')
+        setNewNumber('')
+      })
+      setTimeout(() => {
+        setMessage(null)
+        setType(null)
+      }, 4000)
     }
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} type={type} />
       <Personform handleInput={handleInput} handleNumber={handleNumber} addPerson={addPerson} newName={newName} newNumber={newNumber}/>
       <h2>Numbers</h2>
       <Persons persons={persons}/>
