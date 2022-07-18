@@ -107,7 +107,7 @@ const App = () => {
       }, 4000)
     } else {
       setType('added')
-      setPersons(persons.concat(personObject))
+      //setPersons(persons.concat(personObject))
       setMessage('Nimi ' + newName + ' lisätty luetteloon!')
       personService
       .create(personObject)
@@ -115,6 +115,10 @@ const App = () => {
         setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
+      })
+      .catch(error => {
+        setType('error')
+        setMessage('' + error.response.data.error)
       })
       setTimeout(() => {
         setMessage(null)
