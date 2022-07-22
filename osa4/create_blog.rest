@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkNhbF9BcnZvIiwiaWQiOiI2MmQ5ZDMzMGY0MDEyNDM4YzI3NjJmZjMiLCJpYXQiOjE2NTg0ODU0MDN9.UgRT7Mkmcw-U5PWIjzBXgnrODGhH6ZAdqtbZrWmlxcg
+
+{
+    "title": "Kallun blogi ver3",
+    "author": "Cal_Arvo",
+    "url": "kallu.com",
+    "likes": "332"
+}
